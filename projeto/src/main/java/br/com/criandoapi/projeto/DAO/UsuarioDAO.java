@@ -1,10 +1,10 @@
 package br.com.criandoapi.projeto.DAO;
 
 import br.com.criandoapi.projeto.model.Usuario;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-
-public interface UsuarioDAO extends CrudRepository<Usuario, Integer> {
+// CRUDREPOSITORY ou JPAREPOSITORY para implementar os metodos do crud
+public interface UsuarioDAO extends JpaRepository<Usuario, Integer> {
 
     Usuario findByUsuario(String usuario);
 }
