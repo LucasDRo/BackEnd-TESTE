@@ -5,7 +5,10 @@ import br.com.criandoapi.projeto.model.Usuario;
 import br.com.criandoapi.projeto.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,6 +51,6 @@ public class UsuarioController {
         if(login){
             return ResponseEntity.status(200).build();
         }else
-            return ResponseEntity.status(500).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }

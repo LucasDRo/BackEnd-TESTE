@@ -3,6 +3,8 @@ package br.com.criandoapi.projeto.service;
 import br.com.criandoapi.projeto.DAO.UsuarioDAO;
 import br.com.criandoapi.projeto.model.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,10 +16,13 @@ public class UsuarioService {
     //@Autowired
     //private UsuarioDAO userDao;
 
+    //Ferramenta de criptografia
+    private PasswordEncoder passwordEncoder;
     private UsuarioDAO userDao;
 
     public UsuarioService (UsuarioDAO userDao){
         this.userDao = userDao;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     public List<Usuario> listarUsuarios(){
@@ -26,6 +31,9 @@ public class UsuarioService {
     }
 
     public Usuario criarUsuario(Usuario user){
+        //criptografando a senha
+        String encoder = this.passwordEncoder.encode(user.getSenha());
+        user.setSenha(encoder);
         userDao.save(user);
         return user;
     }
@@ -42,9 +50,6 @@ public class UsuarioService {
 
     public Boolean validarLogin(Usuario user){
         Usuario usuario = userDao.findByUsuario(user.getUsuario());
-        if(usuario.getSenha()!=null && usuario.getSenha().equals(user.getSenha())){
-            return true;
-        }
-        return false;
+        return (user.getSenha()!=null && passwordEncoder.matches(user.getSenha(), usuario.getSenha()));
     }
 }
